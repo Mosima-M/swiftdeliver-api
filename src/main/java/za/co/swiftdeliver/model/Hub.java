@@ -1,3 +1,5 @@
+package za.co.swiftdeliver.model;
+
 public class Hub {
     private final String hubId;
     private final String province;
