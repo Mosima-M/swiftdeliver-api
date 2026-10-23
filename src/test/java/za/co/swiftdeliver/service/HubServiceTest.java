@@ -3,6 +3,7 @@ package za.co.swiftdeliver.service;
 import org.junit.jupiter.api.Test;
 import za.co.swiftdeliver.exception.DuplicateHubException;
 import za.co.swiftdeliver.exception.HubNotFoundException;
+import za.co.swiftdeliver.exception.InvalidHubException;
 import za.co.swiftdeliver.model.Hub;
 import za.co.swiftdeliver.repository.HubRepository;
 import za.co.swiftdeliver.repository.InMemoryHubRepository;
@@ -82,5 +83,45 @@ public class HubServiceTest {
         HubService service = new HubService(repo);
 
         assertThrows(HubNotFoundException.class, () ->service.getHubById("H-999"));
+    }
+
+    @Test
+    void shouldRejectHubWithBlankId() {
+        HubRepository repo = new InMemoryHubRepository();
+        HubService service = new HubService(repo);
+        Hub hub1 = new Hub("", "Gauteng", "Pretoria", true);
+
+        assertThrows(InvalidHubException.class,() ->service.createHub(hub1));
+
+        assertTrue(service.getAllHubs().isEmpty());
+    }
+
+    @Test
+    void shouldRejectHubWithBlankProvince(){
+        HubRepository repo = new InMemoryHubRepository();
+        HubService service = new HubService(repo);
+        Hub hub1 = new Hub("H-001", "", "Pretoria", true);
+
+        assertThrows(InvalidHubException.class,() -> service.createHub(hub1));
+        assertTrue(service.getAllHubs().isEmpty());
+    }
+
+    @Test
+    void shouldRejectHubWithBlankSortingCenter(){
+        HubRepository repo = new InMemoryHubRepository();
+        HubService service = new HubService(repo);
+        Hub hub1 = new Hub("H-001", "Gauteng", "", true);
+
+        assertThrows(InvalidHubException.class, () -> service.createHub(hub1));
+        assertTrue(service.getAllHubs().isEmpty());
+    }
+    @Test
+    void shouldRejectHubWithMissingActiveStatus(){
+        HubRepository repo = new InMemoryHubRepository();
+        HubService service = new HubService(repo);
+        Hub hub1 = new Hub("H-001", "Gauteng", "Pretoria", null);
+
+        assertThrows(InvalidHubException.class, () ->service.createHub(hub1));
+        assertTrue(service.getAllHubs().isEmpty());
     }
 }

@@ -1,12 +1,19 @@
 package za.co.swiftdeliver.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Hub {
     private final String hubId;
     private final String province;
     private final String sortingCenter;
-    private final boolean active;
+    private final Boolean active;
 
-   public Hub(String hubId, String province, String sortingCenter,boolean active){
+    @JsonCreator
+   public Hub(        @JsonProperty("hubId") String hubId,
+                      @JsonProperty("province") String province,
+                      @JsonProperty("sortingCenter") String sortingCenter,
+                      @JsonProperty("active") Boolean active){
        this.hubId = hubId;
        this.province = province;
        this.sortingCenter = sortingCenter;
@@ -25,7 +32,7 @@ public class Hub {
         return sortingCenter;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 }

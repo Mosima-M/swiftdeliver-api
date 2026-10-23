@@ -1,6 +1,7 @@
 package za.co.swiftdeliver;
 
 import io.javalin.Javalin;
+import za.co.swiftdeliver.exception.DuplicateHubException;
 import za.co.swiftdeliver.exception.HubNotFoundException;
 import za.co.swiftdeliver.repository.HubRepository;
 import za.co.swiftdeliver.repository.InMemoryHubRepository;
@@ -27,6 +28,10 @@ public class App {
             ctx.result(exception.getMessage());
         });
 
+        app.exception(DuplicateHubException.class, (exception,ctx) ->{
+            ctx.status(409);
+            ctx.result(exception.getMessage());
+                });
 
         app.start(7070);
 
