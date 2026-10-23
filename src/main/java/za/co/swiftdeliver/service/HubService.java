@@ -1,5 +1,7 @@
 package za.co.swiftdeliver.service;
 
+import za.co.swiftdeliver.exception.DuplicateHubException;
+import za.co.swiftdeliver.exception.HubNotFoundException;
 import za.co.swiftdeliver.model.Hub;
 import za.co.swiftdeliver.repository.HubRepository;
 
@@ -17,7 +19,7 @@ public class HubService {
     public void createHub(Hub hub) {
         Optional<Hub> result = repository.getHub(hub.getHubId());
         if(result.isPresent()){
-            throw new IllegalArgumentException("Hub already exists");
+            throw new DuplicateHubException("Hub already exists");
         }
         repository.saveHub(hub);
     }
@@ -30,7 +32,7 @@ public class HubService {
         Optional<Hub> hub = repository.getHub(hubId);
 
         if(hub.isEmpty()){
-            throw new IllegalArgumentException("Hub not found: " + hubId);
+            throw new HubNotFoundException("Hub not found: " + hubId);
         }
         return hub.get();
     }

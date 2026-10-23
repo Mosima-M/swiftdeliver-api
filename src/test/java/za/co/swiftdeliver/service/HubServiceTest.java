@@ -1,6 +1,8 @@
 package za.co.swiftdeliver.service;
 
 import org.junit.jupiter.api.Test;
+import za.co.swiftdeliver.exception.DuplicateHubException;
+import za.co.swiftdeliver.exception.HubNotFoundException;
 import za.co.swiftdeliver.model.Hub;
 import za.co.swiftdeliver.repository.HubRepository;
 import za.co.swiftdeliver.repository.InMemoryHubRepository;
@@ -30,7 +32,7 @@ public class HubServiceTest {
         Hub duplicateHub = new Hub("H-001", "Gauteng", "Joburg", true);
         service.createHub(originalHub);
 
-        assertThrows(IllegalArgumentException.class, () -> service.createHub(duplicateHub));
+        assertThrows(DuplicateHubException.class, () -> service.createHub(duplicateHub));
 
         Optional<Hub> result = repo.getHub("H-001");
 
@@ -79,6 +81,6 @@ public class HubServiceTest {
         HubRepository repo = new InMemoryHubRepository();
         HubService service = new HubService(repo);
 
-        assertThrows(IllegalArgumentException.class, () ->service.getHubById("H-999"));
+        assertThrows(HubNotFoundException.class, () ->service.getHubById("H-999"));
     }
 }
