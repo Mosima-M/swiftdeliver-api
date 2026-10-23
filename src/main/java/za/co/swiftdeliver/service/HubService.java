@@ -3,6 +3,7 @@ package za.co.swiftdeliver.service;
 import za.co.swiftdeliver.model.Hub;
 import za.co.swiftdeliver.repository.HubRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class HubService {
@@ -20,4 +21,19 @@ public class HubService {
         }
         repository.saveHub(hub);
     }
+
+    public List<Hub> getAllHubs() {
+        return repository.getAllHubs();
+    }
+
+    public Hub getHubById(String hubId) {
+        Optional<Hub> hub = repository.getHub(hubId);
+
+        if(hub.isEmpty()){
+            throw new IllegalArgumentException("Hub not found: " + hubId);
+        }
+        return hub.get();
+    }
+
+
 }
